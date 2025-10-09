@@ -9,7 +9,8 @@
 use std::collections::HashMap;
 
 // A structure to store the goal details of a team.
-#[derive(Default)]
+#[derive(Default)] 
+#[derive(Debug)]
 struct TeamScores {
     goals_scored: u8,
     goals_conceded: u8,
@@ -31,6 +32,26 @@ fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
         // Keep in mind that goals scored by team 1 will be the number of goals
         // conceded by team 2. Similarly, goals scored by team 2 will be the
         // number of goals conceded by team 1.
+        let team_1_entry = scores.entry(team_1_name).or_insert_with(Default::default);
+        
+
+        println!("{:?}", team_1_entry);
+        
+        // Update Team 1's goals:
+        team_1_entry.goals_scored += team_1_score;
+        team_1_entry.goals_conceded += team_2_score;
+
+
+        // --- Team 2 Update ---
+        // Get the entry for team 2, inserting a default TeamScores if it doesn't exist.
+        // We must re-call .entry() here.
+        let team_2_entry = scores.entry(team_2_name).or_insert_with(Default::default);
+        println!("team_2_entry {:?}", team_2_entry);
+
+
+        // Update Team 2's goals:
+        team_2_entry.goals_scored += team_2_score;
+        team_2_entry.goals_conceded += team_1_score;
     }
 
     scores
